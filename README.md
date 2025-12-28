@@ -1,73 +1,58 @@
-# Welcome to your Lovable project
+Math Club Hub
 
-## Project info
+A modern, full-stack community management platform designed effectively for university math clubs. This project streamlines event management, student registration, and digital updates through a secure and visually immersive interface.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+🚀 Key Features
+🔒 Robust Authentication System
 
-## How can I edit this code?
+Student Portal: Frictionless, passwordless login using Register Numbers and Email for students.
+Admin Dashboard: Secure, password-protected access for club coordinators and faculty.
+Role-Based Access Control (RBAC): Distinct permissions and views for Admins vs. Students.
+📅 Comprehensive Event Management
 
-There are several ways of editing your application.
+Digital Notice Board: Real-time updates for upcoming workshops, seminars, and contests.
+Admin Controls: Full CRUD (Create, Read, Update, Delete) capabilities for events.
+Media Support: Administration can upload and manage event banners and descriptions.
+🎨 Premium User Experience (UI/UX)
 
-**Use Lovable**
+Glassmorphism Design: A modern, aesthetic interface utilizing translucent layers and vibrant gradients.
+Responsive Layouts: Fully optimized for seamless use across desktops, tablets, and mobile devices.
+Interactive Elements: Smooth micro-animations and intuitive navigation powered by framer-motion (implied or similar libraries) and standard CSS transitions.
+🛠️ Technology Stack
+Frontend
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+React: Component-based UI architecture.
+TypeScript: Ensuring type safety and code reliability.
+Vite: Lightning-fast build tool and development server.
+Tailwind CSS: Utility-first styling for rapid custom design.
+shadcn/ui: High-quality, accessible, and customizable UI components.
+Backend
 
-Changes made via Lovable will be committed automatically to this repo.
+Node.js & Express: Scalable server-side logic and API routing.
+MongoDB (Mongoose): Flexible NoSQL database schema for storing users and events settings.
+Tooling
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+ESLint: Code quality and consistency.
+npm: Package management.
+⚙️ Getting Started
+Clone the Repository
+bash
+git clone https://github.com/yourusername/math-club-hub.git
+cd math-club-hub
+Install Dependencies
+bash
+npm install
+Configure Environment Create a .env file in the root directory and add your necessary environment variables (e.g., MongoDB URI, Secret Keys).
+Run the Application
+bash
+# Start the development server
 npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+📂 Project Structure
+src/: React frontend source code (Pages, Components, Context).
+server/: Backend API logic, controllers, and database models.
+public/: Static assets and images.
+dist/: Production build artifacts.
+✨ Highlights
+Type-Safe: Extensive use of TypeScript interfaces for API responses and component props.
+Modular Architecture: Separation of concerns between Client, Server, and Database layers.
+Modern Standards: Utilizes the latest React hooks and functional component patterns.
