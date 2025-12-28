@@ -37,7 +37,7 @@ npm: Package management.
 ⚙️ Getting Started
 Clone the Repository
 bash
-git clone https://github.com/harsh_06045/math-club-hub.git
+git clone (https://github.com/Harsh06045/MATHSCLUBWEB.git)
 cd math-club-hub
 Install Dependencies
 bash
