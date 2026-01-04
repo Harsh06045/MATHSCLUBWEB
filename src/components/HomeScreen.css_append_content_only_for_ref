@@ -1,0 +1,118 @@
+
+/* Announcements Page Styles */
+.announcements-container {
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeIn 0.4s ease;
+}
+
+.section-subtitle {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    margin-top: -0.5rem;
+}
+
+.announcements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.announcement-card {
+    background-color: var(--bg-color);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.announcement-card:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    transform: translateX(4px);
+}
+
+/* Category Specific Borders */
+.announcement-card.exam { border-left-color: #ef4444; }
+.announcement-card.club { border-left-color: var(--primary-color); }
+.announcement-card.general { border-left-color: var(--accent-color); }
+
+.announcement-header {
+    margin-bottom: 1rem;
+}
+
+.announcement-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.category-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.category-badge.exam { background-color: #fef2f2; color: #ef4444; }
+.category-badge.club { background-color: #eff6ff; color: var(--primary-color); }
+.category-badge.general { background-color: #fffbeb; color: var(--accent-color); }
+
+.announcement-date {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.announcement-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.announcement-body {
+    position: relative;
+}
+
+.announcement-text {
+    font-size: 1rem;
+    color: var(--text-light);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Truncate after 2 lines initially */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: all 0.5s ease; /* Smooth transition for height/clamp changes if supported, though line-clamp isn't fully animatable directly, height is */
+}
+
+/* Hacky smooth expand for line-clamp - usually requires max-height, but let's try a simple class toggle first */
+.announcement-text.expanded {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+}
+
+.read-more-btn {
+    margin-top: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+}
+
+.read-more-btn:hover {
+    text-decoration: underline;
+}

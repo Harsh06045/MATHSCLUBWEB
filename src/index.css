@@ -1,0 +1,69 @@
+:root {
+    /* Brand Palette - Modern Light (Academic SaaS) */
+    --primary: #2563eb;
+    /* Royal Blue */
+    --primary-hover: #1d4ed8;
+    --background: #ffffff;
+    /* Clarity White */
+    --surface: #f1f5f9;
+    /* Light Slate Section Surface */
+    --surface-hover: #e2e8f0;
+    --text: #334155;
+    /* Slate Text */
+    --text-muted: #64748b;
+    --accent: #d97706;
+    /* Amber Accent */
+    --accent-hover: #b45309;
+    --border: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background-color: var(--surface);
+    color: var(--text);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+input,
+button,
+select,
+textarea {
+    font-family: inherit;
+}
