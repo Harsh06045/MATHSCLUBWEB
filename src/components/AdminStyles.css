@@ -1,0 +1,235 @@
+/* Admin Panel Layout */
+.admin-container {
+    display: flex;
+    width: 100vw;
+    /* Full viewport width */
+    height: 100vh;
+    /* Full viewport height */
+    overflow: hidden;
+    /* Prevent outer scroll */
+    background-color: var(--background);
+}
+
+/* Sidebar (Left Panel) */
+.admin-sidebar {
+    width: 20%;
+    /* Strictly 20% width */
+    min-width: 250px;
+    /* Minimum legible width */
+    background-color: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+}
+
+.sidebar-header {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sidebar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.menu-item {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.menu-item:hover {
+    background-color: var(--surface-hover);
+    color: var(--text);
+}
+
+.menu-item.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Main Content (Right Panel) */
+.admin-content {
+    flex: 1;
+    /* Takes remaining 80% */
+    padding: 2rem;
+    overflow-y: auto;
+    /* Scroll only inside content area */
+    width: 100%;
+    /* Ensure it fills the flex item */
+}
+
+.content-header {
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+}
+
+/* Approvals List */
+.approvals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.approval-card {
+    background-color: #fff;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.approval-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.approval-header {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1.5fr auto auto auto;
+    /* Name, Email, Role, Approve, Reject, Expand */
+    align-items: center;
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.action-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.action-icon-btn.approve {
+    color: #22c55e;
+    /* Green */
+    background-color: #f0fdf4;
+}
+
+.action-icon-btn.approve:hover {
+    background-color: #22c55e;
+    color: white;
+}
+
+.action-icon-btn.reject {
+    color: #ef4444;
+    /* Red */
+    background-color: #fef2f2;
+}
+
+.action-icon-btn.reject:hover {
+    background-color: #ef4444;
+    color: white;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.user-email {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.user-role-badge {
+    display: inline-flex;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    background-color: var(--surface);
+    color: var(--text);
+    width: fit-content;
+}
+
+.expand-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.expand-btn:hover {
+    background-color: var(--surface);
+    color: var(--primary);
+}
+
+/* Expanded Details */
+.approval-details {
+    background-color: var(--surface);
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.detail-item label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.detail-item span {
+    font-weight: 500;
+    color: var(--text);
+}

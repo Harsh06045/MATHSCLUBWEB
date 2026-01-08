@@ -3,6 +3,7 @@ import LoginScreen from './components/LoginScreen';
 import RegisterScreen from './components/RegisterScreen';
 import ForgotPasswordScreen from './components/ForgotPasswordScreen';
 import HomeScreen from './components/HomeScreen';
+import AdminPanel from './components/AdminPanel'; // Import Admin Panel
 import './App.css';
 
 function App() {
@@ -14,11 +15,14 @@ function App() {
     setUserRole(role);
     if (data) {
       setUserData(data);
-    } else if (!userData) {
-      // Fallback if no specific user data provided (e.g., direct login without register)
-      // We might set a default here or handle it in LoginScreen
     }
-    setCurrentScreen('home');
+
+    // Redirect logic
+    if (role === 'admin') {
+      setCurrentScreen('admin');
+    } else {
+      setCurrentScreen('home');
+    }
   };
 
   const handleRegister = (data) => {
@@ -48,6 +52,11 @@ function App() {
         <HomeScreen
           userRole={userRole}
           userData={userData}
+          onNavigate={setCurrentScreen}
+        />
+      )}
+      {currentScreen === 'admin' && (
+        <AdminPanel
           onNavigate={setCurrentScreen}
         />
       )}
