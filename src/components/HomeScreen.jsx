@@ -149,6 +149,10 @@ const HomeScreen = ({ userRole, onNavigate, userData }) => {
             setRegisteredEventIds(prev => [...prev, selectedEvent.id]);
         }
     };
+    const handleLogout = () => {
+        localStorage.removeItem('session');
+        onNavigate('login');
+    };
 
     const pastEvents = [
         {
@@ -285,10 +289,11 @@ const HomeScreen = ({ userRole, onNavigate, userData }) => {
                                 </button>
                                 <button
                                     className="dropdown-item logout-item"
-                                    onClick={() => onNavigate('login')}
+                                    onClick={handleLogout}
                                 >
                                     <LogOut size={16} /> Logout
                                 </button>
+
                             </div>
                         )}
                     </div>
