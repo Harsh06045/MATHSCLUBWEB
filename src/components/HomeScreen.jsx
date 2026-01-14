@@ -5,18 +5,12 @@ import {
     Calendar,
     Megaphone,
     ArrowRight,
-    Instagram,
-    Linkedin,
-    Mail,
-    Contact,
     CheckCircle,
     MapPin,
-    Clock,
     Users,
     Video,
     ChevronLeft,
     ChevronRight,
-    Tag,
     User,
     LogOut,
     X,
@@ -26,8 +20,15 @@ import {
 import './HomeScreen.css';
 import logo from '../assets/logo.png';
 
-// Update component signature to accept userData
-const HomeScreen = ({ userRole, onNavigate, userData }) => {
+// Update component signature to accept userData and CONTENT PROPS
+const HomeScreen = ({
+    userRole,
+    onNavigate,
+    userData,
+    announcements = [],
+    ongoingEvents = [],
+    pastEvents = []
+}) => {
 
     // State Management
     const [activeTab, setActiveTab] = useState('Overview');
@@ -90,58 +91,7 @@ const HomeScreen = ({ userRole, onNavigate, userData }) => {
         );
     };
 
-    const announcements = [
-        {
-            id: 1,
-            title: "End Semester Exam Schedule Released",
-            date: "May 15, 2026",
-            category: "Exam",
-            content: "The final exam schedule for the Spring 2026 semester has been released. Please check the university portal for your specific seating arrangements and timing. Ensure you carry your admit cards. Good luck to all students!"
-        },
-        {
-            id: 2,
-            title: "Club Membership Renewal",
-            date: "April 20, 2026",
-            category: "Club",
-            content: "It's that time of the year! All existing members are requested to renew their memberships by end of this month to retain access to exclusive resources and events. Early bird renewals get a special MathClub merchandise pack."
-        },
-        {
-            id: 3,
-            title: "Workshop on Cryptography",
-            date: "March 10, 2026",
-            category: "General",
-            content: "Join us for an exciting deep dive into the world of Cryptography. We will cover topics ranging from classical ciphers to modern RSA encryption. This session is open to all students, regardless of their major. Snacks will be provided! Don't miss this opportunity to learn how to keep secrets safe in the digital age."
-        },
-        {
-            id: 4,
-            title: "Library Renovation Update",
-            date: "February 28, 2026",
-            category: "General",
-            content: "The main university library will be undergoing renovations starting next week. The 3rd floor will be closed for access. Temporary study spaces have been set up in the Student Center. We apologize for the inconvenience and hope to unveil a better learning environment soon."
-        }
-    ];
-
-
     const teams = ['Technical Team', 'Design Team', 'Social Media', 'Content Team'];
-
-    const ongoingEvents = [
-        {
-            id: 1,
-            title: "Math Hackathon 2026",
-            date: "March 15, 2026",
-            location: "Main Auditorium",
-            description: "A 24-hour hackathon solving complex mathematical problems using code.",
-            tags: ["Coding", "Competition"]
-        },
-        {
-            id: 2,
-            title: "Guest Lecture: Number Theory",
-            date: "February 10, 2026",
-            location: "Room 304",
-            description: "An exclusive session with Prof. Andrew Wiles on modern number theory.",
-            tags: ["Lecture", "Academic"]
-        }
-    ];
 
     const handleEventRegistration = () => {
         setEventRegistrationSuccess(true);
@@ -153,43 +103,6 @@ const HomeScreen = ({ userRole, onNavigate, userData }) => {
         localStorage.removeItem('session');
         onNavigate('login');
     };
-
-    const pastEvents = [
-        {
-            id: 101,
-            title: "Integration Bee 2025",
-            date: "December 12, 2025",
-            attendance: 150,
-            description: "Our annual integration contest was a huge success!",
-            images: [
-                "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800", // Math board
-                {
-                    type: 'video',
-                    src: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', // More reliable CDN
-                    thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800' // Laptop screen
-                },
-                "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?auto=format&fit=crop&q=80&w=800" // Calculator
-            ]
-        },
-        {
-            id: 102,
-            title: "Freshers' Orientation",
-            date: "September 05, 2025",
-            attendance: 200,
-            description: "Welcoming the new batch of math enthusiasts.",
-            images: [
-                "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&q=80&w=800", // University gathering
-                "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=800", // Group study
-                "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=800", // Classroom (New 3rd)
-                "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800", // People working
-                "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&q=80&w=800", // Auditorium
-                "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800", // Teamwork
-                "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800", // Students working (New 7th)
-                "https://images.unsplash.com/photo-1560523160-754a9e25c68f?auto=format&fit=crop&q=80&w=800"  // Hands in circle
-            ]
-        }
-    ];
-
 
     const navItems = ['Overview', 'Register', 'About Us', 'Events', 'Announcements'];
 
@@ -463,7 +376,7 @@ const HomeScreen = ({ userRole, onNavigate, userData }) => {
 
                                 <div className="event-detail-card">
                                     <div className="detail-header">
-                                        <span className="event-tag-large">{selectedEvent.tags[0]}</span>
+                                        <span className="event-tag-large">{selectedEvent.tags ? selectedEvent.tags[0] : 'Event'}</span>
                                         <h2 className="detail-title">{selectedEvent.title}</h2>
                                     </div>
 
@@ -472,10 +385,12 @@ const HomeScreen = ({ userRole, onNavigate, userData }) => {
                                             <Calendar className="meta-icon" />
                                             <span>{selectedEvent.date}</span>
                                         </div>
-                                        <div className="meta-item">
-                                            <MapPin className="meta-icon" />
-                                            <span>{selectedEvent.location}</span>
-                                        </div>
+                                        {selectedEvent.location && (
+                                            <div className="meta-item">
+                                                <MapPin className="meta-icon" />
+                                                <span>{selectedEvent.location}</span>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <p className="detail-description">{selectedEvent.description}</p>
@@ -522,101 +437,109 @@ const HomeScreen = ({ userRole, onNavigate, userData }) => {
 
                                 <div className="events-grid">
                                     {eventCategory === 'Ongoing' ? (
-                                        ongoingEvents.map(event => {
-                                            const isEventRegistered = registeredEventIds.includes(event.id);
-                                            return (
-                                                <div key={event.id} className="event-card ongoing">
-                                                    <div className="event-date-badge">
-                                                        <span className="month">{event.date.split(' ')[0].substring(0, 3)}</span>
-                                                        <span className="day">{event.date.split(' ')[1].replace(',', '')}</span>
-                                                    </div>
-                                                    <div className="event-content">
-                                                        <div className="event-tags">
-                                                            {event.tags.map(tag => <span key={tag} className="event-tag">{tag}</span>)}
+                                        ongoingEvents.length > 0 ? (
+                                            ongoingEvents.map(event => {
+                                                const isEventRegistered = registeredEventIds.includes(event.id);
+                                                return (
+                                                    <div key={event.id} className="event-card ongoing">
+                                                        <div className="event-date-badge">
+                                                            <span className="month">{event.date.split(' ')[0].substring(0, 3)}</span>
+                                                            <span className="day">{event.date.split(' ')[1] ? event.date.split(' ')[1].replace(',', '') : ''}</span>
                                                         </div>
-                                                        <h3 className="event-title">{event.title}</h3>
-                                                        <div className="event-meta">
-                                                            <MapPin size={14} /> {event.location}
-                                                        </div>
-                                                        <p className="event-desc-short">{event.description}</p>
+                                                        <div className="event-content">
+                                                            <div className="event-tags">
+                                                                {event.tags && event.tags.map(tag => <span key={tag} className="event-tag">{tag}</span>)}
+                                                            </div>
+                                                            <h3 className="event-title">{event.title}</h3>
+                                                            <div className="event-meta">
+                                                                <MapPin size={14} /> {event.location}
+                                                            </div>
+                                                            <p className="event-desc-short">{event.description}</p>
 
-                                                        {isEventRegistered ? (
-                                                            <button
-                                                                className="event-register-btn registered"
-                                                                disabled
-                                                                style={{ cursor: 'not-allowed', opacity: 0.7, backgroundColor: '#10b981' }}
-                                                            >
-                                                                <CheckCircle size={16} /> Already Registered
-                                                            </button>
-                                                        ) : (
-                                                            <button
-                                                                className="event-register-btn"
-                                                                onClick={() => setSelectedEvent(event)}
-                                                            >
-                                                                Register Now <ArrowRight size={16} />
-                                                            </button>
-                                                        )}
+                                                            {isEventRegistered ? (
+                                                                <button
+                                                                    className="event-register-btn registered"
+                                                                    disabled
+                                                                    style={{ cursor: 'not-allowed', opacity: 0.7, backgroundColor: '#10b981' }}
+                                                                >
+                                                                    <CheckCircle size={16} /> Already Registered
+                                                                </button>
+                                                            ) : (
+                                                                <button
+                                                                    className="event-register-btn"
+                                                                    onClick={() => setSelectedEvent(event)}
+                                                                >
+                                                                    Register Now <ArrowRight size={16} />
+                                                                </button>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            );
-                                        })
+                                                );
+                                            })
+                                        ) : <p>No ongoing events.</p>
                                     ) : (
-                                        pastEvents.map(event => {
-                                            const displayImages = event.images.length > 5 ? event.images.slice(0, 5) : event.images;
-                                            const remainingCount = event.images.length - 4;
+                                        pastEvents.length > 0 ? (
+                                            pastEvents.map(event => {
+                                                // Handle images safely
+                                                const images = event.images || [];
+                                                const displayImages = images.length > 5 ? images.slice(0, 5) : images;
+                                                const remainingCount = images.length - 4;
 
-                                            return (
-                                                <div key={event.id} className="event-card past">
-                                                    <div className="past-event-header">
-                                                        <h3 className="event-title">{event.title}</h3>
-                                                        <span className="event-date-simple">{event.date}</span>
-                                                    </div>
-                                                    <div className="attendance-badge">
-                                                        <Users size={14} /> {event.attendance} Attendees
-                                                    </div>
-                                                    <p className="event-desc-short">{event.description}</p>
-                                                    <div className="event-gallery-preview">
-                                                        {displayImages.map((item, idx) => {
-                                                            const isVideo = typeof item === 'object' && item.type === 'video';
-                                                            const imgSrc = isVideo ? item.thumbnail : item;
-                                                            const mediaSrc = isVideo ? item.src : item;
-                                                            const mediaType = isVideo ? 'video' : 'image';
+                                                return (
+                                                    <div key={event.id} className="event-card past">
+                                                        <div className="past-event-header">
+                                                            <h3 className="event-title">{event.title}</h3>
+                                                            <span className="event-date-simple">{event.date}</span>
+                                                        </div>
+                                                        {event.attendance && (
+                                                            <div className="attendance-badge">
+                                                                <Users size={14} /> {event.attendance} Attendees
+                                                            </div>
+                                                        )}
+                                                        <p className="event-desc-short">{event.description}</p>
+                                                        <div className="event-gallery-preview">
+                                                            {displayImages.map((item, idx) => {
+                                                                const isVideo = typeof item === 'object' && item.type === 'video';
+                                                                const imgSrc = isVideo ? item.thumbnail : item;
+                                                                const mediaSrc = isVideo ? item.src : item;
+                                                                const mediaType = isVideo ? 'video' : 'image';
 
-                                                            return (
-                                                                <div key={idx} className="gallery-placeholder" style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer' }}>
-                                                                    {event.images.length > 5 && idx === 4 ? (
-                                                                        <div className="gallery-overlay">
-                                                                            <span>+{remainingCount}</span>
-                                                                        </div>
-                                                                    ) : null}
-                                                                    <img src={imgSrc} alt={`Gallery ${idx}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-
-                                                                    {isVideo && (
-                                                                        <div className="video-icon-overlay" style={{
-                                                                            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                                                                            display: 'flex', justifyContent: 'center', alignItems: 'center',
-                                                                            backgroundColor: 'rgba(0,0,0,0.3)'
-                                                                        }}>
-                                                                            <div style={{
-                                                                                background: 'rgba(255,255,255,0.2)', borderRadius: '50%', padding: '12px',
-                                                                                backdropFilter: 'blur(4px)', display: 'flex'
-                                                                            }}>
-                                                                                <Video size={24} color="white" fill="white" />
+                                                                return (
+                                                                    <div key={idx} className="gallery-placeholder" style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer' }}>
+                                                                        {images.length > 5 && idx === 4 ? (
+                                                                            <div className="gallery-overlay">
+                                                                                <span>+{remainingCount}</span>
                                                                             </div>
-                                                                        </div>
-                                                                    )}
+                                                                        ) : null}
+                                                                        <img src={imgSrc} alt={`Gallery ${idx}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
 
-                                                                    <div className="gallery-click-handler"
-                                                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 5 }}
-                                                                        onClick={() => setSelectedImage({ src: mediaSrc, type: mediaType, eventId: event.id, index: idx })}
-                                                                    ></div>
-                                                                </div>
-                                                            );
-                                                        })}
+                                                                        {isVideo && (
+                                                                            <div className="video-icon-overlay" style={{
+                                                                                position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                                                                                display: 'flex', justifyContent: 'center', alignItems: 'center',
+                                                                                backgroundColor: 'rgba(0,0,0,0.3)'
+                                                                            }}>
+                                                                                <div style={{
+                                                                                    background: 'rgba(255,255,255,0.2)', borderRadius: '50%', padding: '12px',
+                                                                                    backdropFilter: 'blur(4px)', display: 'flex'
+                                                                                }}>
+                                                                                    <Video size={24} color="white" fill="white" />
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+
+                                                                        <div className="gallery-click-handler"
+                                                                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 5 }}
+                                                                            onClick={() => setSelectedImage({ src: mediaSrc, type: mediaType, eventId: event.id, index: idx })}
+                                                                        ></div>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            );
-                                        })
+                                                );
+                                            })
+                                        ) : <p>No past events recorded.</p>
                                     )}
                                 </div>
                             </>
@@ -745,18 +668,9 @@ const HomeScreen = ({ userRole, onNavigate, userData }) => {
                             {/* Navigation Buttons */}
                             {(() => {
                                 const event = pastEvents.find(e => e.id === selectedImage.eventId);
-                                const images = event ? event.images : [];
+                                const images = event ? event.images || [] : [];
                                 const hasPrev = selectedImage.index > 0;
                                 const hasNext = selectedImage.index < images.length - 1;
-
-                                console.log('Lightbox Debug:', {
-                                    selected: selectedImage,
-                                    eventId: selectedImage.eventId,
-                                    foundEvent: !!event,
-                                    totalImages: images.length,
-                                    hasPrev,
-                                    hasNext
-                                });
 
                                 const handleNavigate = (direction) => {
                                     const newIndex = direction === 'next' ? selectedImage.index + 1 : selectedImage.index - 1;
@@ -800,72 +714,13 @@ const HomeScreen = ({ userRole, onNavigate, userData }) => {
                                             </button>
                                         )}
                                     </>
-                                );
+                                )
                             })()}
                         </div>
                     </div>
                 )
             }
-
-            {/* Profile Detail Modal */}
-            {
-                showProfileModal && (
-                    <div className="modal-overlay">
-                        <div className="modal-card profile-modal">
-                            <button
-                                className="modal-close-btn"
-                                onClick={() => setShowProfileModal(false)}
-                            >
-                                <X size={24} />
-                            </button>
-
-                            <div className="profile-header">
-                                <div className="profile-large-avatar">
-                                    <span className="profile-initials">{currentUser.fullName.split(' ').map(n => n[0]).join('')}</span>
-                                </div>
-                                <h2 className="profile-name">{currentUser.fullName}</h2>
-                                <span className="profile-role-badge">{currentUser.role}</span>
-                            </div>
-
-                            <div className="profile-details-grid">
-                                <div className="detail-group">
-                                    <label>Email Address</label>
-                                    <p>{currentUser.email}</p>
-                                </div>
-                                <div className="detail-group">
-                                    <label>Phone Number</label>
-                                    <p>{currentUser.phone}</p>
-                                </div>
-                                <div className="detail-group">
-                                    <label>Department</label>
-                                    <p>{currentUser.department}</p>
-                                </div>
-                                <div className="detail-group">
-                                    <label>Year</label>
-                                    <p>{currentUser.year}</p>
-                                </div>
-                                <div className="detail-group full-width">
-                                    <label>Registration Number</label>
-                                    <p>{currentUser.regNo}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
-
-            {/* Footer */}
-            < footer className="home-footer" >
-                <span className="footer-branding">MathClub | Think • Solve • Grow</span>
-                <div className="social-links">
-                    <a href="#" className="social-link" title="Instagram"><Instagram size={20} /></a>
-                    <a href="#" className="social-link" title="LinkedIn"><Linkedin size={20} /></a>
-                    <a href="#" className="social-link" title="Contact"><Contact size={20} /></a>
-                    <a href="#" className="social-link" title="Email"><Mail size={20} /></a>
-                </div>
-                <p className="copyright">© {new Date().getFullYear()} MathClub. All Rights Reserved.</p>
-            </footer >
-        </div >
+        </div>
     );
 };
 
