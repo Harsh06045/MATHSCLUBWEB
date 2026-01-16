@@ -94,7 +94,7 @@ const DEFAULT_PAST_EVENTS = [
   }
 ];
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = `http://${window.location.hostname}:5000/api`;
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState(() => {
