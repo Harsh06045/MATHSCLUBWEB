@@ -10,28 +10,28 @@ import './App.css';
 // DEFAULT DATA (Moved from HomeScreen)
 const DEFAULT_ANNOUNCEMENTS = [
   {
-    id: 1,
+    _id: "1",
     title: "End Semester Exam Schedule Released",
     date: "May 15, 2026",
     category: "Exam",
     content: "The final exam schedule for the Spring 2026 semester has been released. Please check the university portal for your specific seating arrangements and timing. Ensure you carry your admit cards. Good luck to all students!"
   },
   {
-    id: 2,
+    _id: "2",
     title: "Club Membership Renewal",
     date: "April 20, 2026",
     category: "Club",
     content: "It's that time of the year! All existing members are requested to renew their memberships by end of this month to retain access to exclusive resources and events. Early bird renewals get a special MathClub merchandise pack."
   },
   {
-    id: 3,
+    _id: "3",
     title: "Workshop on Cryptography",
     date: "March 10, 2026",
     category: "General",
     content: "Join us for an exciting deep dive into the world of Cryptography. We will cover topics ranging from classical ciphers to modern RSA encryption. This session is open to all students, regardless of their major. Snacks will be provided! Don't miss this opportunity to learn how to keep secrets safe in the digital age."
   },
   {
-    id: 4,
+    _id: "4",
     title: "Library Renovation Update",
     date: "February 28, 2026",
     category: "General",
@@ -41,7 +41,7 @@ const DEFAULT_ANNOUNCEMENTS = [
 
 const DEFAULT_ONGOING_EVENTS = [
   {
-    id: 1,
+    _id: "1",
     title: "Math Hackathon 2026",
     date: "March 15, 2026",
     location: "Main Auditorium",
@@ -49,7 +49,7 @@ const DEFAULT_ONGOING_EVENTS = [
     tags: ["Coding", "Competition"]
   },
   {
-    id: 2,
+    _id: "2",
     title: "Guest Lecture: Number Theory",
     date: "February 10, 2026",
     location: "Room 304",
@@ -60,7 +60,7 @@ const DEFAULT_ONGOING_EVENTS = [
 
 const DEFAULT_PAST_EVENTS = [
   {
-    id: 101,
+    _id: "101",
     title: "Integration Bee 2025",
     date: "December 12, 2025",
     attendance: 150,
@@ -76,7 +76,7 @@ const DEFAULT_PAST_EVENTS = [
     ]
   },
   {
-    id: 102,
+    _id: "102",
     title: "Freshers' Orientation",
     date: "September 05, 2025",
     attendance: 200,
@@ -94,16 +94,17 @@ const DEFAULT_PAST_EVENTS = [
   }
 ];
 
+const API_URL = 'http://localhost:5000/api';
+
 function App() {
   const [currentScreen, setCurrentScreen] = useState(() => {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session?.isLoggedIn) {
-      // Determine screen based on role
       switch (session.role) {
         case 'admin': return 'admin';
         case 'club_member': return 'member_panel';
-        case 'student': return 'home'; // Explicitly student -> home
-        default: return 'home'; // Fallback
+        case 'student': return 'home';
+        default: return 'home';
       }
     }
     return 'login';
@@ -118,40 +119,57 @@ function App() {
   });
 
   // GLOBAL STATE
-  const [approvals, setApprovals] = useState(() =>
-    JSON.parse(localStorage.getItem('approvals')) || []
-  );
+  const [approvals, setApprovals] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
+  const [ongoingEvents, setOngoingEvents] = useState([]);
+  const [pastEvents, setPastEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [members, setMembers] = useState(() =>
-    JSON.parse(localStorage.getItem('members')) || []
-  );
-
-  // New Global State for Content
-  const [announcements, setAnnouncements] = useState(() =>
-    JSON.parse(localStorage.getItem('announcements')) || DEFAULT_ANNOUNCEMENTS
-  );
-
-  const [ongoingEvents, setOngoingEvents] = useState(() =>
-    JSON.parse(localStorage.getItem('ongoingEvents')) || DEFAULT_ONGOING_EVENTS
-  );
-
-  const [pastEvents, setPastEvents] = useState(() =>
-    JSON.parse(localStorage.getItem('pastEvents')) || DEFAULT_PAST_EVENTS
-  );
-
-
-  // PERSISTENCE EFFECT
+  // FETCH INITIAL DATA
   useEffect(() => {
-    localStorage.setItem('approvals', JSON.stringify(approvals));
-    localStorage.setItem('members', JSON.stringify(members));
-    localStorage.setItem('announcements', JSON.stringify(announcements));
-    localStorage.setItem('ongoingEvents', JSON.stringify(ongoingEvents));
-    localStorage.setItem('pastEvents', JSON.stringify(pastEvents));
-  }, [approvals, members, announcements, ongoingEvents, pastEvents]);
+    const fetchData = async () => {
+      try {
+        const [usersRes, contentRes, announcementsRes] = await Promise.all([
+          fetch(`${API_URL}/users/approvals`),
+          fetch(`${API_URL}/content/events`),
+          fetch(`${API_URL}/content/announcements`)
+        ]);
+
+        const rawApprovals = await usersRes.json();
+        const rawEvents = await contentRes.json();
+        const rawAnnouncements = await announcementsRes.json();
+
+        const approvalsData = Array.isArray(rawApprovals) ? rawApprovals : [];
+        const eventsData = Array.isArray(rawEvents) ? rawEvents : [];
+        const announcementsData = Array.isArray(rawAnnouncements) ? rawAnnouncements : [];
+
+        setApprovals(approvalsData);
+        setAnnouncements(announcementsData.length > 0 ? announcementsData : DEFAULT_ANNOUNCEMENTS);
+        setOngoingEvents(eventsData.filter(e => e.category === 'Ongoing').length > 0
+          ? eventsData.filter(e => e.category === 'Ongoing')
+          : DEFAULT_ONGOING_EVENTS);
+        setPastEvents(eventsData.filter(e => e.category === 'Past').length > 0
+          ? eventsData.filter(e => e.category === 'Past')
+          : DEFAULT_PAST_EVENTS);
+
+        const membersRes = await fetch(`${API_URL}/users/members`);
+        const rawMembers = await membersRes.json();
+        const membersData = Array.isArray(rawMembers) ? rawMembers : [];
+        setMembers(membersData);
+
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
 
-  //  LOGIN
-  const handleLogin = (role, data = null) => {
+  const handleLogin = async (role, data = null) => {
     setUserRole(role);
     if (data) setUserData(data);
 
@@ -162,82 +180,115 @@ function App() {
     };
     localStorage.setItem('session', JSON.stringify(sessionData));
 
-    // Route based on role
     if (role === 'admin') setCurrentScreen('admin');
     else if (role === 'club_member') setCurrentScreen('member_panel');
     else setCurrentScreen('home');
   };
 
 
-  //  REGISTER → PENDING APPROVAL
-  const handleRegister = (data) => {
-    setApprovals([
-      ...approvals,
-      {
-        ...data,
-        id: Date.now(),
-        status: 'pending'
-      }
-    ]);
-  };
-
-  //  ADMIN APPROVE
-  const approveUser = (id) => {
-    const user = approvals.find(u => u.id === id);
-    if (!user) return;
-
-    const approvedUser = { ...user, status: 'approved' };
-    setMembers(prev => [...prev, approvedUser]);
-    setApprovals(prev => prev.filter(u => u.id !== id));
-  };
-
-
-  //  ADMIN REJECT
-  const rejectUser = (id) => {
-    const rejectedUser = approvals.find(u => u.id === id);
-    if (!rejectedUser) return;
-
-    const updatedUser = { ...rejectedUser, status: 'rejected' };
-    setApprovals(prev => prev.filter(u => u.id !== id));
-
-    const rejected = JSON.parse(localStorage.getItem('rejected')) || [];
-    localStorage.setItem('rejected', JSON.stringify([...rejected, updatedUser]));
-  };
-
-  // CONTENT HANDLERS
-  const handleAddEvent = (eventData) => {
-    if (eventData.category === 'Past') {
-      setPastEvents(prev => [eventData, ...prev]);
-    } else {
-      setOngoingEvents(prev => [eventData, ...prev]);
+  const handleRegister = async (data) => {
+    try {
+      const res = await fetch(`${API_URL}/users/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const newUser = await res.json();
+      setApprovals([...approvals, newUser]);
+    } catch (err) {
+      console.error('Registration error:', err);
     }
   };
 
-  const handleAddAnnouncement = (announcementData) => {
-    setAnnouncements(prev => [announcementData, ...prev]);
+  const approveUser = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/users/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'approved' })
+      });
+      const approvedUser = await res.json();
+      setMembers(prev => [...prev, approvedUser]);
+      setApprovals(prev => prev.filter(u => u._id !== id));
+    } catch (err) {
+      console.error('Approval error:', err);
+    }
   };
 
-  const handleAddMedia = (eventId, mediaItem) => {
-    setPastEvents(prev => prev.map(event => {
-      if (event.id === eventId) {
-        return {
-          ...event,
-          images: [...(event.images || []), mediaItem]
-        };
+
+  const rejectUser = async (id) => {
+    try {
+      await fetch(`${API_URL}/users/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'rejected' })
+      });
+      setApprovals(prev => prev.filter(u => u._id !== id));
+    } catch (err) {
+      console.error('Rejection error:', err);
+    }
+  };
+
+  const handleAddEvent = async (eventData) => {
+    try {
+      const res = await fetch(`${API_URL}/content/events`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(eventData)
+      });
+      const newEvent = await res.json();
+      if (newEvent.category === 'Past') {
+        setPastEvents(prev => [newEvent, ...prev]);
+      } else {
+        setOngoingEvents(prev => [newEvent, ...prev]);
       }
-      return event;
-    }));
+    } catch (err) {
+      console.error('Add event error:', err);
+    }
+  };
+
+  const handleAddAnnouncement = async (announcementData) => {
+    try {
+      const res = await fetch(`${API_URL}/content/announcements`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(announcementData)
+      });
+      const newAnnouncement = await res.json();
+      setAnnouncements(prev => [newAnnouncement, ...prev]);
+    } catch (err) {
+      console.error('Add announcement error:', err);
+    }
+  };
+
+  const handleAddMedia = async (eventId, mediaItem) => {
+    const event = pastEvents.find(e => e._id === eventId);
+    if (!event) return;
+
+    const updatedImages = [...(event.images || []), mediaItem];
+    handleUpdateEvent({ ...event, images: updatedImages });
   };
 
 
-  const handleUpdateEvent = (updatedEvent) => {
-    // Check Past Events first
-    setPastEvents(prev => prev.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev));
-
-    // Check Ongoing Events
-    setOngoingEvents(prev => prev.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev));
+  const handleUpdateEvent = async (updatedEvent) => {
+    try {
+      const res = await fetch(`${API_URL}/content/events/${updatedEvent._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedEvent)
+      });
+      const correctedEvent = await res.json();
+      setPastEvents(prev => prev.map(ev => ev._id === correctedEvent._id ? correctedEvent : ev));
+      setOngoingEvents(prev => prev.map(ev => ev._id === correctedEvent._id ? correctedEvent : ev));
+    } catch (err) {
+      console.error('Update event error:', err);
+    }
   };
 
+
+  if (loading) {
+    return <div className="loading-screen">Loading Maths Club Hub...</div>;
+  }
 
   return (
     <>
@@ -266,7 +317,6 @@ function App() {
           userRole={userRole}
           userData={userData}
           onNavigate={setCurrentScreen}
-          // Pass content props
           announcements={announcements}
           ongoingEvents={ongoingEvents}
           pastEvents={pastEvents}

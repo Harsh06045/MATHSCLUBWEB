@@ -214,7 +214,7 @@ const MemberPanel = ({
                                 </h3>
                                 <div className="content-grid">
                                     {events.ongoing.length === 0 ? <p className="text-muted" style={{ fontStyle: 'italic', paddingLeft: '1rem' }}>No active events currently.</p> : events.ongoing.map(ev => (
-                                        <div key={ev.id} className="member-card">
+                                        <div key={ev._id} className="member-card">
                                             <div>
                                                 <div className="card-header">
                                                     <span className="card-title">{ev.title}</span>
@@ -244,7 +244,7 @@ const MemberPanel = ({
                                 {events.past.length === 0 ? <p className="text-muted" style={{ fontStyle: 'italic', paddingLeft: '1rem' }}>No past events.</p> : (
                                     <div className="content-grid">
                                         {events.past.map(ev => (
-                                            <div key={ev.id} className="member-card" onClick={() => handleEventClick(ev)} style={{ cursor: 'pointer' }}>
+                                            <div key={ev._id} className="member-card" onClick={() => handleEventClick(ev)} style={{ cursor: 'pointer' }}>
                                                 <div className="card-header">
                                                     <span className="card-title">{ev.title}</span>
                                                     <span className="card-date" style={{ background: '#f1f5f9', color: '#64748b' }}>{ev.date}</span>
@@ -283,7 +283,7 @@ const MemberPanel = ({
                     {activeView === 'announcements' && (
                         <div className="content-grid">
                             {announcements.map(ann => (
-                                <div key={ann.id} className="member-card">
+                                <div key={ann._id} className="member-card">
                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                                         <span className={`badge ${ann.category.toLowerCase()}`}>{ann.category}</span>
                                         <small style={{ color: '#94a3b8' }}>{ann.date}</small>
@@ -304,13 +304,13 @@ const MemberPanel = ({
                                 </div>
                             ) : (
                                 approvals.map(user => (
-                                    <div key={user.id} className="request-card">
+                                    <div key={user._id} className="request-card">
                                         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                             <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                <span style={{ fontWeight: 700, color: '#64748b' }}>{user.fullName.charAt(0)}</span>
+                                                <span style={{ fontWeight: 700, color: '#64748b' }}>{user.name.charAt(0)}</span>
                                             </div>
                                             <div className="user-info">
-                                                <h4>{user.fullName}</h4>
+                                                <h4>{user.name}</h4>
                                                 <p>{user.email}</p>
                                             </div>
                                         </div>
@@ -518,9 +518,9 @@ const MemberPanel = ({
                         <form onSubmit={handleSubmitMedia}>
                             <div className="form-group">
                                 <label>Target Event (Past Only)</label>
-                                <select required className="form-input" value={mediaUpload.eventId} onChange={e => setMediaUpload({ ...mediaUpload, eventId: Number(e.target.value) })}>
+                                <select required className="form-input" value={mediaUpload.eventId} onChange={e => setMediaUpload({ ...mediaUpload, eventId: e.target.value })}>
                                     <option value="">-- Select Event --</option>
-                                    {events.past.map(e => <option key={e.id} value={e.id}>{e.title}</option>)}
+                                    {events.past.map(e => <option key={e._id} value={e._id}>{e.title}</option>)}
                                 </select>
                             </div>
                             <div className="form-group">

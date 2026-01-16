@@ -38,8 +38,8 @@ const AdminPanel = ({
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('session'); 
-    onNavigate('login');               
+    localStorage.removeItem('session');
+    onNavigate('login');
   };
 
 
@@ -106,12 +106,12 @@ const AdminPanel = ({
               </div>
             ) : (
               approvals.map((user) => (
-                <div key={user.id} className="approval-card">
+                <div key={user._id} className="approval-card">
                   <div
                     className="approval-header"
-                    onClick={() => toggleExpand(user.id)}
+                    onClick={() => toggleExpand(user._id)}
                   >
-                    <div className="user-name">{user.fullName}</div>
+                    <div className="user-name">{user.name}</div>
                     <div className="user-email">{user.email}</div>
                     <span className="user-role-badge">
                       {user.role.replace('_', ' ')}
@@ -121,7 +121,7 @@ const AdminPanel = ({
                       className="action-icon-btn approve"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleApprove(user.id);
+                        handleApprove(user._id);
                       }}
                     >
                       <Check size={18} />
@@ -131,14 +131,14 @@ const AdminPanel = ({
                       className="action-icon-btn reject"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleReject(user.id);
+                        handleReject(user._id);
                       }}
                     >
                       <X size={18} />
                     </button>
 
                     <button className="expand-btn">
-                      {expandedId === user.id ? (
+                      {expandedId === user._id ? (
                         <ChevronUp size={20} />
                       ) : (
                         <ChevronDown size={20} />
@@ -146,12 +146,12 @@ const AdminPanel = ({
                     </button>
                   </div>
 
-                  {expandedId === user.id && (
+                  {expandedId === user._id && (
                     <div className="approval-details">
                       <div className="details-grid">
                         <div className="detail-item">
                           <label>Register Number</label>
-                          <span>{user.regNo}</span>
+                          <span>{user.registrationNumber}</span>
                         </div>
                         <div className="detail-item">
                           <label>Department</label>
@@ -180,20 +180,20 @@ const AdminPanel = ({
               </div>
             ) : (
               members.map((user) => (
-                <div key={user.id} className="approval-card">
+                <div key={user._id} className="approval-card">
                   <div
                     className="approval-header"
-                    onClick={() => toggleExpand(user.id)}
+                    onClick={() => toggleExpand(user._id)}
                     style={{ gridTemplateColumns: '2fr 2fr 1.5fr auto' }}
                   >
-                    <div className="user-name">{user.fullName}</div>
+                    <div className="user-name">{user.name}</div>
                     <div className="user-email">{user.email}</div>
                     <span className="user-role-badge">
                       {user.role.replace('_', ' ')}
                     </span>
 
                     <button className="expand-btn">
-                      {expandedId === user.id ? (
+                      {expandedId === user._id ? (
                         <ChevronUp size={20} />
                       ) : (
                         <ChevronDown size={20} />
@@ -201,12 +201,12 @@ const AdminPanel = ({
                     </button>
                   </div>
 
-                  {expandedId === user.id && (
+                  {expandedId === user._id && (
                     <div className="approval-details">
                       <div className="details-grid">
                         <div className="detail-item">
                           <label>Register Number</label>
-                          <span>{user.regNo}</span>
+                          <span>{user.registrationNumber}</span>
                         </div>
                         <div className="detail-item">
                           <label>Department</label>

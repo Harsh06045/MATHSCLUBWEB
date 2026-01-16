@@ -71,12 +71,12 @@ const HomeScreen = ({
 
     // Ensure userData has a fallback if null (though App handles it)
     const currentUser = userData || {
-        fullName: "Guest User",
+        name: "Guest User",
         email: "guest@example.com",
         role: userRole || "Guest",
         department: "N/A",
         year: "N/A",
-        regNo: "N/A",
+        registrationNumber: "N/A",
         phone: "N/A"
     };
 
@@ -96,7 +96,7 @@ const HomeScreen = ({
     const handleEventRegistration = () => {
         setEventRegistrationSuccess(true);
         if (selectedEvent) {
-            setRegisteredEventIds(prev => [...prev, selectedEvent.id]);
+            setRegisteredEventIds(prev => [...prev, selectedEvent._id]);
         }
     };
     const handleLogout = () => {
@@ -177,7 +177,7 @@ const HomeScreen = ({
                 </div>
                 <div className="user-greeting">
                     {/* Desktop Greeting */}
-                    <span className="greeting-text desktop-only">Welcome back, {currentUser.fullName.split(' ')[0]}</span>{/* Force Update */}
+                    <span className="greeting-text desktop-only">Welcome back, {currentUser.name.split(' ')[0]}</span>{/* Force Update */}
 
                     <div className="user-profile-section" style={{ position: 'relative' }}>
                         <button
@@ -439,9 +439,9 @@ const HomeScreen = ({
                                     {eventCategory === 'Ongoing' ? (
                                         ongoingEvents.length > 0 ? (
                                             ongoingEvents.map(event => {
-                                                const isEventRegistered = registeredEventIds.includes(event.id);
+                                                const isEventRegistered = registeredEventIds.includes(event._id);
                                                 return (
-                                                    <div key={event.id} className="event-card ongoing">
+                                                    <div key={event._id} className="event-card ongoing">
                                                         <div className="event-date-badge">
                                                             <span className="month">{event.date.split(' ')[0].substring(0, 3)}</span>
                                                             <span className="day">{event.date.split(' ')[1] ? event.date.split(' ')[1].replace(',', '') : ''}</span>
@@ -486,7 +486,7 @@ const HomeScreen = ({
                                                 const remainingCount = images.length - 4;
 
                                                 return (
-                                                    <div key={event.id} className="event-card past">
+                                                    <div key={event._id} className="event-card past">
                                                         <div className="past-event-header">
                                                             <h3 className="event-title">{event.title}</h3>
                                                             <span className="event-date-simple">{event.date}</span>
@@ -530,7 +530,7 @@ const HomeScreen = ({
 
                                                                         <div className="gallery-click-handler"
                                                                             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 5 }}
-                                                                            onClick={() => setSelectedImage({ src: mediaSrc, type: mediaType, eventId: event.id, index: idx })}
+                                                                            onClick={() => setSelectedImage({ src: mediaSrc, type: mediaType, eventId: event._id, index: idx })}
                                                                         ></div>
                                                                     </div>
                                                                 );
@@ -561,7 +561,7 @@ const HomeScreen = ({
                                 const isLongText = item.content.length > 100; // Threshold for expansion
 
                                 return (
-                                    <div key={item.id} className={`announcement-card ${item.category.toLowerCase()}`}>
+                                    <div key={item._id} className={`announcement-card ${item.category.toLowerCase()}`}>
                                         <div className="announcement-header">
                                             <div className="announcement-meta">
                                                 <span className={`category-badge ${item.category.toLowerCase()}`}>{item.category}</span>
@@ -576,7 +576,7 @@ const HomeScreen = ({
                                             {isLongText && (
                                                 <button
                                                     className="read-more-btn"
-                                                    onClick={() => toggleAnnouncement(item.id)}
+                                                    onClick={() => toggleAnnouncement(item._id)}
                                                 >
                                                     {isExpanded ? 'Read Less' : 'Read More'}
                                                 </button>
@@ -667,7 +667,7 @@ const HomeScreen = ({
 
                             {/* Navigation Buttons */}
                             {(() => {
-                                const event = pastEvents.find(e => e.id === selectedImage.eventId);
+                                const event = pastEvents.find(e => e._id === selectedImage.eventId);
                                 const images = event ? event.images || [] : [];
                                 const hasPrev = selectedImage.index > 0;
                                 const hasNext = selectedImage.index < images.length - 1;

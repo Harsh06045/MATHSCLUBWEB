@@ -7,8 +7,8 @@ const LoginScreen = ({
   onForgotPassword,
   onNavigate,
   onLogin,
-  approvals=[],
-  members=[]
+  approvals = [],
+  members = []
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState('');
@@ -21,7 +21,7 @@ const LoginScreen = ({
 
     //  ADMIN LOGIN (always allowed)
     if (role === 'admin') {
-      onLogin('admin', { role: 'admin', email });
+      onLogin('admin', { role: 'admin', email, password: e.target.password.value });
       return;
     }
 
@@ -131,7 +131,7 @@ const LoginScreen = ({
                   type="button"
                   onClick={onForgotPassword}
                   className="forgot-link"
-                   style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                 >
                   Forgot password?
                 </button>
@@ -142,6 +142,7 @@ const LoginScreen = ({
                   className="form-input"
                   placeholder="••••••••"
                   required
+                  name="password"
                 />
                 <button
                   type="button"

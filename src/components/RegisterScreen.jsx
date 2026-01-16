@@ -16,6 +16,7 @@ const RegisterScreen = ({ onNavigate, onRegister }) => {
     const [year, setYear] = useState('');
     const [department, setDepartment] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
 
     const [showSuccess, setShowSuccess] = useState(false);
 
@@ -28,6 +29,7 @@ const RegisterScreen = ({ onNavigate, onRegister }) => {
         setYear('');
         setDepartment('');
         setEmail('');
+        setPhone('');
     };
 
     const handleSubmit = (e) => {
@@ -35,13 +37,14 @@ const RegisterScreen = ({ onNavigate, onRegister }) => {
 
         //  Send data to App.jsx
         onRegister({
-            fullName,
-            regNo,
+            name: fullName,
+            registrationNumber: regNo,
             year,
             department,
             email,
+            password,
             role,
-            phone: ""
+            phone
         });
 
         setShowSuccess(true);
@@ -190,16 +193,30 @@ const RegisterScreen = ({ onNavigate, onRegister }) => {
                         </div>
 
                         {/* EMAIL */}
-                        <div className="form-group">
-                            <label className="form-label form-label-row">Email Address</label>
-                            <input
-                                type="email"
-                                className="form-input"
-                                placeholder="euler@example.com"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
+                        <div className="flex gap-4">
+                            <div className="form-group flex-1">
+                                <label className="form-label form-label-row">Email Address</label>
+                                <input
+                                    type="email"
+                                    className="form-input"
+                                    placeholder="euler@example.com"
+                                    required
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="form-group flex-1">
+                                <label className="form-label form-label-row">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    className="form-input"
+                                    placeholder="+91 1234567890"
+                                    required
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                />
+                            </div>
                         </div>
 
                         {/* PASSWORD */}
