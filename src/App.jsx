@@ -94,7 +94,7 @@ const DEFAULT_PAST_EVENTS = [
   }
 ];
 
-const API_URL = `http://${window.location.hostname}:5000/api`;
+const API_URL = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000/api`;
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState(() => {
@@ -169,20 +169,50 @@ function App() {
   }, []);
 
 
-  const handleLogin = async (role, data = null) => {
-    setUserRole(role);
-    if (data) setUserData(data);
+  const handleLogin = async (email, password, role) => {
+    try {
+      const res = await fetch(`${API_URL}/users/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
 
-    const sessionData = {
-      isLoggedIn: true,
-      role,
-      userData: data
-    };
-    localStorage.setItem('session', JSON.stringify(sessionData));
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || 'Login failed');
+      }
 
-    if (role === 'admin') setCurrentScreen('admin');
-    else if (role === 'club_member') setCurrentScreen('member_panel');
-    else setCurrentScreen('home');
+      const user = await res.json();
+
+      // Verify role matches what was selected on frontend
+      if (user.role !== role) {
+        throw new Error(`Account exists but not as ${role.replace('_', ' ')}`);
+      }
+
+      // Verify status for non-admin
+      if (user.role !== 'admin' && user.status !== 'approved') {
+        throw new Error('Your account is pending admin approval.');
+      }
+
+      setUserRole(user.role);
+      setUserData(user);
+
+      const sessionData = {
+        isLoggedIn: true,
+        role: user.role,
+        userData: user
+      };
+      localStorage.setItem('session', JSON.stringify(sessionData));
+
+      if (user.role === 'admin') setCurrentScreen('admin');
+      else if (user.role === 'club_member') setCurrentScreen('member_panel');
+      else setCurrentScreen('home');
+
+      return { success: true };
+    } catch (err) {
+      console.error('Login error:', err);
+      return { success: false, message: err.message };
+    }
   };
 
 
@@ -193,10 +223,18 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      const newUser = await res.json();
-      setApprovals([...approvals, newUser]);
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.message || 'Registration failed');
+      }
+
+      setApprovals([...approvals, result]);
+      return { success: true };
     } catch (err) {
       console.error('Registration error:', err);
+      return { success: false, message: err.message };
     }
   };
 

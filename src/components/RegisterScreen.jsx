@@ -32,11 +32,19 @@ const RegisterScreen = ({ onNavigate, onRegister }) => {
         setPhone('');
     };
 
-    const handleSubmit = (e) => {
+    const [error, setError] = useState('');
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
 
         //  Send data to App.jsx
-        onRegister({
+        const result = await onRegister({
             name: fullName,
             registrationNumber: regNo,
             year,
@@ -47,8 +55,12 @@ const RegisterScreen = ({ onNavigate, onRegister }) => {
             phone
         });
 
-        setShowSuccess(true);
-        resetForm();
+        if (result && result.success) {
+            setShowSuccess(true);
+            resetForm();
+        } else {
+            setError(result?.message || 'Registration failed. Please try again.');
+        }
     };
 
     const handleCloseSuccess = () => {

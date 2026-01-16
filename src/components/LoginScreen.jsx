@@ -15,38 +15,21 @@ const LoginScreen = ({
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    //  ADMIN LOGIN (always allowed)
-    if (role === 'admin') {
-      onLogin('admin', { role: 'admin', email, password: e.target.password.value });
+    if (!role) {
+      setError('Please select a role.');
       return;
     }
 
-    //  Check if user exists in approved members
-    const approvedUser = members.find(
-      (u) => u.email === email && u.role === role
-    );
+    const password = e.target.password.value;
+    const result = await onLogin(email, password, role);
 
-    if (approvedUser) {
-      onLogin(role, approvedUser);
-      return;
+    if (result && !result.success) {
+      setError(result.message);
     }
-
-    // ⏳ Check if user is pending approval
-    const pendingUser = approvals.find(
-      (u) => u.email === email && u.role === role
-    );
-
-    if (pendingUser) {
-      setError(' Your account is pending admin approval.');
-      return;
-    }
-
-    //  Not registered
-    setError(' No account found. Please register first.');
   };
 
   return (
