@@ -141,6 +141,8 @@ const LoginScreen = ({
             {error && (
               <p style={{ color: '#ef4444', textAlign: 'center', fontSize: '14px' }}>
                 {error}
+                {/* DEBUG INFO: Remove later */}
+                <br /><small style={{ opacity: 0.7 }}>Server: {API_URL}</small>
               </p>
             )}
 
