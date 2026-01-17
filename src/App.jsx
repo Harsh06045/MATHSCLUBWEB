@@ -177,12 +177,19 @@ function App() {
         body: JSON.stringify({ email, password })
       });
 
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || 'Login failed');
+      let data;
+      const text = await res.text();
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (e) {
+        throw new Error('Server returned invalid response (not JSON)');
       }
 
-      const user = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      const user = data;
 
       // Verify role matches what was selected on frontend
       if (user.role !== role) {
@@ -224,7 +231,13 @@ function App() {
         body: JSON.stringify(data)
       });
 
-      const result = await res.json();
+      let result;
+      const text = await res.text();
+      try {
+        result = text ? JSON.parse(text) : {};
+      } catch (e) {
+        throw new Error('Server returned invalid response (not JSON)');
+      }
 
       if (!res.ok) {
         throw new Error(result.message || 'Registration failed');
